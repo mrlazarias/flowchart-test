@@ -1,4 +1,4 @@
-import { EdgeProps, Position, getSmoothStepPath } from "@xyflow/react";
+import { EdgeProps, getSmoothStepPath } from "@xyflow/react";
 
 export default function DefaultEdge({
   id,
@@ -9,7 +9,6 @@ export default function DefaultEdge({
   sourcePosition,
   targetPosition,
   style = {},
-  data,
   markerEnd,
 }: EdgeProps) {
   const [edgePath] = getSmoothStepPath({

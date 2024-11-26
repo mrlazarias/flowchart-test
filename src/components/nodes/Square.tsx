@@ -15,6 +15,7 @@ export function Square({ data, selected, id }: NodeProps) {
     );
   };
 
+  // Hook para ajustar as dimensões ao redimensionar
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {

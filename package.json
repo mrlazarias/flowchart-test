@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-toolbar": "^1.1.0",
     "@reactflow/node-resizer": "^2.2.14",
     "@xyflow/react": "^12.3.5",

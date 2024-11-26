@@ -58,10 +58,43 @@ function App() {
         data: {
           label: `Node ${nodes.length + 1}`,
           color: generateRandomColor(),
-          setNodes, // Passando `setNodes` aqui
+          setNodes,
         },
       },
     ]);
+  }
+
+  function saveToJson() {
+    const data = { nodes, edges };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "flow_data.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  function loadFromJson(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result as string;
+        try {
+          const data = JSON.parse(content);
+          setNodes(data.nodes || []);
+          setEdges(data.edges || []);
+        } catch (error) {
+          alert("Erro ao carregar o arquivo JSON. Verifique o formato.");
+        }
+      };
+      reader.readAsText(file);
+    }
   }
 
   return (
@@ -83,13 +116,28 @@ function App() {
         <Controls />
       </ReactFlow>
 
-      <Toolbar.Root className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg border border-zinc-300 px-8 h-20 w-96 overflow-hidden flex justify-between items-center">
+      <Toolbar.Root className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg border border-zinc-300 px-8 h-20 w-[36rem] overflow-hidden flex justify-between items-center">
         <Toolbar.Button
           onClick={addSquareNode}
           className="bg-violet-500 rounded px-4 py-2 text-white"
         >
           Add Node
         </Toolbar.Button>
+        <Toolbar.Button
+          onClick={saveToJson}
+          className="bg-green-500 rounded px-4 py-2 text-white"
+        >
+          Save JSON
+        </Toolbar.Button>
+        <label className="bg-blue-500 rounded px-4 py-2 text-white cursor-pointer">
+          Load JSON
+          <input
+            type="file"
+            accept="application/json"
+            onChange={loadFromJson}
+            className="hidden"
+          />
+        </label>
       </Toolbar.Root>
     </div>
   );

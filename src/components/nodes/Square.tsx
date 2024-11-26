@@ -32,8 +32,7 @@ export function Square({ data, selected, id }: NodeProps) {
     };
   }, [id]);
 
-  // Calcular tamanho da fonte dinamicamente
-  const fontSize = Math.min(dimensions.width, dimensions.height) * 0.1; // Ajuste de escala
+  const fontSize = Math.min(dimensions.width, dimensions.height) * 0.1;
 
   return (
     <div
@@ -57,7 +56,7 @@ export function Square({ data, selected, id }: NodeProps) {
         className="absolute text-center bg-transparent text-white font-bold outline-none"
         style={{
           fontSize: `${fontSize}px`,
-          width: "80%", // Ajustável conforme o design
+          width: "80%",
         }}
       />
       <Handle

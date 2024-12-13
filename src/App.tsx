@@ -15,9 +15,11 @@ import "@xyflow/react/dist/style.css";
 import { Square } from "./components/nodes/Square";
 import { useCallback } from "react";
 import DefaultEdge from "./components/edges/DefaultEdge";
+import { TextNode } from "./components/nodes/TextNode";
 
 const NODE_TYPES = {
   square: Square,
+  text: TextNode,
 };
 
 const EDGE_TYPES = {
@@ -137,6 +139,24 @@ function App() {
     ]);
   }
 
+  function addTextNode() {
+    setNodes((nodes) => [
+      ...nodes,
+      {
+        id: crypto.randomUUID(),
+        type: "text",
+        position: {
+          x: Math.random() * 800 + 100,
+          y: Math.random() * 400 + 100,
+        },
+        data: {
+          label: "Novo Texto",
+          color: "#000000", // Cor inicial
+        },
+      },
+    ]);
+  }
+
   function saveToJson() {
     const data = { nodes, edges };
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -195,6 +215,12 @@ function App() {
           className="bg-violet-500 rounded px-4 py-2 text-white"
         >
           Add Node
+        </Toolbar.Button>
+        <Toolbar.Button
+          onClick={addTextNode}
+          className="bg-blue-500 rounded px-4 py-2 text-white"
+        >
+          Add Text
         </Toolbar.Button>
         <Toolbar.Button
           onClick={saveToJson}

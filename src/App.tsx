@@ -15,20 +15,95 @@ import "@xyflow/react/dist/style.css";
 import { Square } from "./components/nodes/Square";
 import { useCallback } from "react";
 import DefaultEdge from "./components/edges/DefaultEdge";
+import { TextNode } from "./components/nodes/TextNode";
 
 const NODE_TYPES = {
   square: Square,
+  text: TextNode,
 };
 
 const EDGE_TYPES = {
   default: DefaultEdge,
 };
 
-const INITIAL_NODES: Node[] = [];
+const SIPOC_INITIAL_NODES = [
+  {
+    id: "suppliers",
+    type: "square",
+    position: { x: 100, y: 200 },
+    data: {
+      label: "Suppliers",
+      color: "#4FD1C5",
+    },
+  },
+  {
+    id: "inputs",
+    type: "square",
+    position: { x: 400, y: 200 },
+    data: {
+      label: "Inputs",
+      color: "#F6AD55",
+    },
+  },
+  {
+    id: "process",
+    type: "square",
+    position: { x: 700, y: 200 },
+    data: {
+      label: "Process",
+      color: "#90CDF4",
+    },
+  },
+  {
+    id: "outputs",
+    type: "square",
+    position: { x: 1000, y: 200 },
+    data: {
+      label: "Outputs",
+      color: "#FEB2B2",
+    },
+  },
+  {
+    id: "customers",
+    type: "square",
+    position: { x: 1300, y: 200 },
+    data: {
+      label: "Customers",
+      color: "#B794F4",
+    },
+  },
+];
+
+const SIPOC_INITIAL_EDGES = [
+  {
+    id: "suppliers-inputs",
+    source: "suppliers",
+    target: "inputs",
+    type: "default",
+  },
+  {
+    id: "inputs-process",
+    source: "inputs",
+    target: "process",
+    type: "default",
+  },
+  {
+    id: "process-outputs",
+    source: "process",
+    target: "outputs",
+    type: "default",
+  },
+  {
+    id: "outputs-customers",
+    source: "outputs",
+    target: "customers",
+    type: "default",
+  },
+];
 
 function App() {
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(INITIAL_NODES);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(SIPOC_INITIAL_EDGES);
+  const [nodes, setNodes, onNodesChange] = useNodesState(SIPOC_INITIAL_NODES);
 
   const onConnect = useCallback((connection: Connection) => {
     if (connection.source !== connection.target) {
@@ -59,6 +134,24 @@ function App() {
           label: `Node ${nodes.length + 1}`,
           color: generateRandomColor(),
           setNodes,
+        },
+      },
+    ]);
+  }
+
+  function addTextNode() {
+    setNodes((nodes) => [
+      ...nodes,
+      {
+        id: crypto.randomUUID(),
+        type: "text",
+        position: {
+          x: Math.random() * 800 + 100,
+          y: Math.random() * 400 + 100,
+        },
+        data: {
+          label: "Novo Texto",
+          color: "#000000", // Cor inicial
         },
       },
     ]);
@@ -122,6 +215,12 @@ function App() {
           className="bg-violet-500 rounded px-4 py-2 text-white"
         >
           Add Node
+        </Toolbar.Button>
+        <Toolbar.Button
+          onClick={addTextNode}
+          className="bg-blue-500 rounded px-4 py-2 text-white"
+        >
+          Add Text
         </Toolbar.Button>
         <Toolbar.Button
           onClick={saveToJson}
